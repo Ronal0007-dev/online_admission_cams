@@ -1,0 +1,57 @@
+extends ../layout
+
+block content
+  .status-page
+    .status-container
+      a.back-home(href="/")
+        i.fas.fa-arrow-left
+        |  Home
+      h1 Track Your Application
+      p Enter your application number to check the current status.
+
+      form.status-form(action="/status" method="POST")
+        .input-row
+          input(type="text" name="applicationNumber" placeholder="e.g. APP-2024-12345" required)
+          button(type="submit")
+            i.fas.fa-search
+            |  Check
+
+      if error
+        .alert.alert-error
+          i.fas.fa-exclamation-circle
+          |  #{error}
+
+      if result
+        .status-result
+          .result-header
+            h2 #{result.fullName}
+            .app-num Application ##{result.applicationNumber}
+          .status-badge(class=`status-${result.status}`)
+            - const icons = { pending: '⏳', approved: '✅', rejected: '❌' }
+            | #{icons[result.status]} #{result.status.charAt(0).toUpperCase() + result.status.slice(1)}
+          .result-details
+            .detail-row
+              span Date of Birth
+              strong #{result.dateOfBirth}
+            .detail-row
+              span Gender
+              strong #{result.gender}
+            .detail-row
+              span Applied On
+              strong #{new Date(result.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+            if result.approvedAt
+              .detail-row
+                span Approved On
+                strong #{new Date(result.approvedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          if result.status === 'pending'
+            .status-note.note-pending
+              i.fas.fa-info-circle
+              |  Your application is under review. We'll notify you via email once a decision is made.
+          else if result.status === 'approved'
+            .status-note.note-approved
+              i.fas.fa-check-circle
+              |  Congratulations! Please visit the school office with required documents within 7 working days.
+          else if result.status === 'rejected'
+            .status-note.note-rejected
+              i.fas.fa-times-circle
+              |  Unfortunately, your application was not approved. Please contact the admissions office for details.

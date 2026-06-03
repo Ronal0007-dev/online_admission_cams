@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+  .success-page
+    .success-card
+      .success-icon ✅
+      h1 Application Submitted!
+      p Your admission application has been successfully received.
+      .app-number-box
+        span Application Number
+        strong #{applicationNumber}
+      p.note Please save your application number. You will need it to track your application status.
+      .success-actions
+        a.btn-primary(href="/status")
+          i.fas.fa-search
+          |  Track Status
+        a.btn-outline(href="/")
+          i.fas.fa-home
+          |  Back to Home

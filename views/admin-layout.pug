@@ -1,0 +1,64 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title #{title} – Admin Panel
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css")
+    link(rel="stylesheet" href="/css/admin.css")
+    block head
+  body.admin-body
+    .admin-wrapper
+      //- Sidebar
+      aside.sidebar
+        .sidebar-brand
+          .brand-icon 🏫
+          .brand-text
+            span.brand-name Greenfield
+            span.brand-sub Academy
+        nav.sidebar-nav
+          a.nav-item(href="/admin/dashboard" class=title.includes('Dashboard') ? 'active' : '')
+            i.fas.fa-th-large
+            span Dashboard
+          a.nav-item(href="/admin/students" class=title.includes('Students') ? 'active' : '')
+            i.fas.fa-users
+            span All Students
+          a.nav-item(href="/admin/students?status=pending" class=(title.includes('Students') && typeof status !== 'undefined' && status === 'pending') ? 'active' : '')
+            i.fas.fa-clock
+            span Pending
+          a.nav-item(href="/admin/students?status=approved" class=(title.includes('Students') && typeof status !== 'undefined' && status === 'approved') ? 'active' : '')
+            i.fas.fa-check-circle
+            span Approved
+          a.nav-item(href="/admin/students?status=rejected")
+            i.fas.fa-times-circle
+            span Rejected
+        .sidebar-footer
+          .admin-info
+            .admin-avatar #{admin.name.charAt(0)}
+            .admin-details
+              span.admin-name #{admin.name}
+              span.admin-role #{admin.role}
+          a.logout-btn(href="/admin/logout")
+            i.fas.fa-sign-out-alt
+
+      //- Main
+      main.admin-main
+        header.admin-header
+          .header-left
+            button.sidebar-toggle#sidebarToggle
+              i.fas.fa-bars
+            h1.page-title #{title}
+          .header-right
+            a.btn-apply-link(href="/apply" target="_blank")
+              i.fas.fa-external-link-alt
+              |  Apply Form
+
+        .admin-content
+          block content
+
+    block scripts
+    script(src="/js/admin.js")
+    script(src="/js/searchable-select.js")

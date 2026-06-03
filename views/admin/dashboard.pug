@@ -1,0 +1,81 @@
+extends ../admin-layout
+
+block content
+  if success && success.length
+    .alert.alert-success
+      i.fas.fa-check-circle
+      |  #{success[0]}
+  if error && error.length
+    .alert.alert-error
+      i.fas.fa-exclamation-circle
+      |  #{error[0]}
+
+  //- Stat Cards
+  .stats-grid
+    a.stat-card.card-total(href="/admin/students")
+      .stat-icon
+        i.fas.fa-users
+      .stat-body
+        span.stat-label Total Students
+        span.stat-value #{stats.total}
+      .stat-footer View all &rarr;
+
+    a.stat-card.card-pending(href="/admin/students?status=pending")
+      .stat-icon
+        i.fas.fa-hourglass-half
+      .stat-body
+        span.stat-label New Applications
+        span.stat-value #{stats.pending}
+      .stat-footer Review pending &rarr;
+
+    a.stat-card.card-approved(href="/admin/students?status=approved")
+      .stat-icon
+        i.fas.fa-user-check
+      .stat-body
+        span.stat-label Approved Students
+        span.stat-value #{stats.approved}
+      .stat-footer View approved &rarr;
+
+    a.stat-card.card-rejected(href="/admin/students?status=rejected")
+      .stat-icon
+        i.fas.fa-user-times
+      .stat-body
+        span.stat-label Rejected
+        span.stat-value #{stats.rejected}
+      .stat-footer View rejected &rarr;
+
+  //- Recent Applications
+  .dash-section
+    .dash-section-header
+      h2 Recent Applications
+      a(href="/admin/students") View All
+
+    if recent.length
+      .table-wrap
+        table.data-table
+          thead
+            tr
+              th App. Number
+              th Student Name
+              th Gender
+              th Applied
+              th Status
+              th Action
+          tbody
+            each s in recent
+              tr
+                td.app-num #{s.applicationNumber}
+                td #{s.fullName}
+                td #{s.gender}
+                td #{new Date(s.createdAt).toLocaleDateString('en-GB')}
+                td
+                  span.badge(class=`badge-${s.status}`) #{s.status}
+                td
+                  a.btn-view(href=`/admin/students/${s.id}`)
+                    i.fas.fa-eye
+                    |  View
+    else
+      .empty-state
+        i.fas.fa-inbox
+        p No applications yet. Share the admission form link!
+        a.btn-primary(href="/apply" target="_blank") Open Admission Form

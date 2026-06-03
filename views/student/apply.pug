@@ -1,0 +1,310 @@
+extends ../layout
+
+block content
+  .apply-page
+    .apply-header
+      a.back-home(href="/")
+        i.fas.fa-arrow-left
+        |  Home
+      .apply-title-block
+        h1 Student Admission Application
+        p Complete all required sections below. Fields marked * are required.
+
+    .apply-container
+      //- Progress Bar
+      .progress-bar-wrap
+        .progress-steps
+          .step.active(data-step="1")
+            .step-num 1
+            span Student Info
+          .step(data-step="2")
+            .step-num 2
+            span Previous School
+          .step(data-step="3")
+            .step-num 3
+            span Parents
+          .step(data-step="4")
+            .step-num 4
+            span Emergency & Medical
+
+      if errors && errors.length
+        .alert.alert-error
+          i.fas.fa-exclamation-circle
+          ul
+            each err in errors
+              li #{err}
+
+      form#admissionForm(action="/apply" method="POST")
+
+        //- ─── SECTION 1: STUDENT INFO ───────────────────────
+        .form-section.active(data-section="1")
+          .section-heading
+            .section-icon 👤
+            div
+              h2 Student Information
+              p Basic personal details of the student
+
+          .form-grid
+            .form-group.full-width
+              label.required Full Name
+              input(type="text" name="fullName" placeholder="e.g. John Michael Doe" value=formData.fullName || '' required)
+
+            .form-group
+              label.required Date of Birth
+              input(type="date" name="dateOfBirth" value=formData.dateOfBirth || '' required)
+
+            .form-group
+              label.required Gender
+              select(name="gender" required)
+                option(value="" disabled selected) Select gender
+                option(value="Male" selected=formData.gender === 'Male') Male
+                option(value="Female" selected=formData.gender === 'Female') Female
+                option(value="Other" selected=formData.gender === 'Other') Other
+
+            .form-group
+              label.required Country of Birth
+              .searchable-select-wrap
+                input.searchable-input(
+                  type="text"
+                  placeholder="Search country..."
+                  autocomplete="off"
+                  data-target="countryOfBirth"
+                  value=formData.countryOfBirth || ''
+                )
+                input(type="hidden" name="countryOfBirth" value=formData.countryOfBirth || '' required)
+                .dropdown-list
+                  each c in countries
+                    .dropdown-item(data-value=c) #{c}
+
+            .form-group
+              label.required Citizenship
+              .searchable-select-wrap
+                input.searchable-input(
+                  type="text"
+                  placeholder="Search citizenship..."
+                  autocomplete="off"
+                  data-target="citizenship"
+                  value=formData.citizenship || ''
+                )
+                input(type="hidden" name="citizenship" value=formData.citizenship || '' required)
+                .dropdown-list
+                  each c in citizenships
+                    .dropdown-item(data-value=c) #{c}
+
+            .form-group
+              label Religion
+              select(name="religion")
+                option(value="" selected=!formData.religion) Select religion (optional)
+                each r in religions
+                  option(value=r selected=formData.religion === r) #{r}
+
+            .form-group.full-width
+              label.required Language(s) Spoken
+              input(type="text" name="languageSpoken" placeholder="e.g. English, Swahili, French" value=formData.languageSpoken || '' required)
+
+          .section-nav
+            button.btn-next(type="button" data-next="2") Next: Previous School &rarr;
+
+        //- ─── SECTION 2: PREVIOUS SCHOOL ────────────────────
+        .form-section(data-section="2")
+          .section-heading
+            .section-icon 🏫
+            div
+              h2 Previous School Attended
+              p This section is optional – fill in if applicable
+
+          .optional-badge
+            i.fas.fa-info-circle
+            |  Optional Section
+
+          .form-grid
+            .form-group
+              label Name of School
+              input(type="text" name="prevSchoolName" placeholder="School name" value=formData.prevSchoolName || '')
+            .form-group
+              label Year Attended
+              input(type="text" name="prevSchoolYearAttended" placeholder="e.g. 2018 – 2023" value=formData.prevSchoolYearAttended || '')
+            .form-group
+              label Class / Grade
+              input(type="text" name="prevSchoolClass" placeholder="e.g. Grade 5 / Class 5" value=formData.prevSchoolClass || '')
+            .form-group
+              label School Contact Details
+              input(type="text" name="prevSchoolContact" placeholder="Phone or email" value=formData.prevSchoolContact || '')
+
+          .section-nav
+            button.btn-prev(type="button" data-prev="1") &larr; Back
+            button.btn-next(type="button" data-next="3") Next: Parents &rarr;
+
+        //- ─── SECTION 3: PARENTS ────────────────────────────
+        .form-section(data-section="3")
+          .section-heading
+            .section-icon 👨‍👩‍👧
+            div
+              h2 Parent / Guardian Details
+              p Information for both mother and father
+
+          .parent-tabs
+            button.tab-btn.active(type="button" data-tab="mother")
+              i.fas.fa-female
+              |  Mother
+            button.tab-btn(type="button" data-tab="father")
+              i.fas.fa-male
+              |  Father
+
+          .parent-panel.active#mother
+            h3.parent-subheading Mother's Information
+            .form-grid
+              .form-group
+                label Full Name
+                input(type="text" name="motherFullName" placeholder="Mother's full name" value=formData.motherFullName || '')
+              .form-group
+                label Occupation
+                input(type="text" name="motherOccupation" placeholder="e.g. Teacher" value=formData.motherOccupation || '')
+              .form-group.full-width
+                label Physical Address
+                textarea(name="motherAddress" rows="2" placeholder="Street address, city") #{formData.motherAddress || ''}
+              .form-group
+                label Country of Birth
+                .searchable-select-wrap
+                  input.searchable-input(
+                    type="text"
+                    placeholder="Search country..."
+                    autocomplete="off"
+                    data-target="motherCountryOfBirth"
+                    value=formData.motherCountryOfBirth || ''
+                  )
+                  input(type="hidden" name="motherCountryOfBirth" value=formData.motherCountryOfBirth || '')
+                  .dropdown-list
+                    each c in countries
+                      .dropdown-item(data-value=c) #{c}
+              .form-group
+                label Citizenship
+                .searchable-select-wrap
+                  input.searchable-input(
+                    type="text"
+                    placeholder="Search citizenship..."
+                    autocomplete="off"
+                    data-target="motherCitizenship"
+                    value=formData.motherCitizenship || ''
+                  )
+                  input(type="hidden" name="motherCitizenship" value=formData.motherCitizenship || '')
+                  .dropdown-list
+                    each c in citizenships
+                      .dropdown-item(data-value=c) #{c}
+              .form-group
+                label Religion
+                select(name="motherReligion")
+                  option(value="" selected=!formData.motherReligion) Select religion (optional)
+                  each r in religions
+                    option(value=r selected=formData.motherReligion === r) #{r}
+              .form-group
+                label Phone Number
+                input(type="tel" name="motherPhone" placeholder="+255 700 000 000" value=formData.motherPhone || '')
+              .form-group
+                label Email Address
+                input(type="email" name="motherEmail" placeholder="mother@email.com" value=formData.motherEmail || '')
+
+          .parent-panel#father
+            h3.parent-subheading Father's Information
+            .form-grid
+              .form-group
+                label Full Name
+                input(type="text" name="fatherFullName" placeholder="Father's full name" value=formData.fatherFullName || '')
+              .form-group
+                label Occupation
+                input(type="text" name="fatherOccupation" placeholder="e.g. Engineer" value=formData.fatherOccupation || '')
+              .form-group.full-width
+                label Physical Address
+                textarea(name="fatherAddress" rows="2" placeholder="Street address, city") #{formData.fatherAddress || ''}
+              .form-group
+                label Country of Birth
+                .searchable-select-wrap
+                  input.searchable-input(
+                    type="text"
+                    placeholder="Search country..."
+                    autocomplete="off"
+                    data-target="fatherCountryOfBirth"
+                    value=formData.fatherCountryOfBirth || ''
+                  )
+                  input(type="hidden" name="fatherCountryOfBirth" value=formData.fatherCountryOfBirth || '')
+                  .dropdown-list
+                    each c in countries
+                      .dropdown-item(data-value=c) #{c}
+              .form-group
+                label Citizenship
+                .searchable-select-wrap
+                  input.searchable-input(
+                    type="text"
+                    placeholder="Search citizenship..."
+                    autocomplete="off"
+                    data-target="fatherCitizenship"
+                    value=formData.fatherCitizenship || ''
+                  )
+                  input(type="hidden" name="fatherCitizenship" value=formData.fatherCitizenship || '')
+                  .dropdown-list
+                    each c in citizenships
+                      .dropdown-item(data-value=c) #{c}
+              .form-group
+                label Religion
+                select(name="fatherReligion")
+                  option(value="" selected=!formData.fatherReligion) Select religion (optional)
+                  each r in religions
+                    option(value=r selected=formData.fatherReligion === r) #{r}
+              .form-group
+                label Phone Number
+                input(type="tel" name="fatherPhone" placeholder="+255 700 000 000" value=formData.fatherPhone || '')
+              .form-group
+                label Email Address
+                input(type="email" name="fatherEmail" placeholder="father@email.com" value=formData.fatherEmail || '')
+
+          .section-nav
+            button.btn-prev(type="button" data-prev="2") &larr; Back
+            button.btn-next(type="button" data-next="4") Next: Emergency & Medical &rarr;
+
+        //- ─── SECTION 4: EMERGENCY & MEDICAL ────────────────
+        .form-section(data-section="4")
+          .section-heading
+            .section-icon 🚑
+            div
+              h2 Emergency Contact & Medical History
+              p Safety information for your child
+
+          .subsection-title
+            i.fas.fa-phone-volume
+            |  Emergency Contact
+
+          .form-grid
+            .form-group
+              label.required Emergency Contact Name
+              input(type="text" name="emergencyName" placeholder="Full name" value=formData.emergencyName || '' required)
+            .form-group
+              label.required Emergency Contact Phone
+              input(type="tel" name="emergencyPhone" placeholder="+255 700 000 000" value=formData.emergencyPhone || '' required)
+
+          .subsection-title
+            i.fas.fa-notes-medical
+            |  Medical History
+
+          .form-grid
+            .form-group.full-width
+              label Allergies
+              textarea(name="allergies" rows="2" placeholder="List any known allergies, or leave blank if none") #{formData.allergies || ''}
+            .form-group.full-width
+              label Disabilities
+              textarea(name="disabilities" rows="2" placeholder="Describe any disabilities or special needs, or leave blank") #{formData.disabilities || ''}
+            .form-group.full-width
+              .checkbox-wrap
+                label.checkbox-label
+                  input(type="checkbox" name="sightless" checked=formData.sightless === 'on')
+                  .checkmark
+                  span The student has a visual impairment / is sightless
+
+          .declaration-box
+            i.fas.fa-shield-check
+            p By submitting this form, I declare that all information provided is accurate and complete to the best of my knowledge.
+
+          .section-nav
+            button.btn-prev(type="button" data-prev="3") &larr; Back
+            button.btn-submit(type="submit")
+              i.fas.fa-paper-plane
+              |  Submit Application

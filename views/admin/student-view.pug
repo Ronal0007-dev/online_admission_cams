@@ -1,0 +1,189 @@
+extends ../admin-layout
+
+block content
+  if success && success.length
+    .alert.alert-success
+      i.fas.fa-check-circle
+      |  #{success[0]}
+  if error && error.length
+    .alert.alert-error
+      i.fas.fa-exclamation-circle
+      |  #{error[0]}
+
+  .view-header
+    .view-title
+      .back-btn
+        a(href="/admin/students")
+          i.fas.fa-arrow-left
+          |  Back
+      h2 #{student.fullName}
+      .app-badge Application ##{student.applicationNumber}
+    .view-actions
+      span.badge.badge-lg(class=`badge-${student.status}`) #{student.status}
+      a.btn-edit(href=`/admin/students/${student.id}/edit`)
+        i.fas.fa-edit
+        |  Edit
+      if student.status === 'pending'
+        form(action=`/admin/students/${student.id}/approve` method="POST" style="display:inline")
+          button.btn-approve(type="submit")
+            i.fas.fa-check
+            |  Approve
+        form(action=`/admin/students/${student.id}/reject` method="POST" style="display:inline" onsubmit="return confirm('Reject this application?')")
+          button.btn-reject(type="submit")
+            i.fas.fa-times
+            |  Reject
+      else if student.status === 'rejected'
+        form(action=`/admin/students/${student.id}/approve` method="POST" style="display:inline")
+          button.btn-approve(type="submit")
+            i.fas.fa-check
+            |  Approve
+      form(action=`/admin/students/${student.id}/delete` method="POST" style="display:inline" onsubmit="return confirm('Permanently delete this record?')")
+        button.btn-delete-lg(type="submit")
+          i.fas.fa-trash
+          |  Delete
+
+  .view-body
+    //- ── Student Info ──────────────────────────────────
+    .info-card
+      .card-head
+        .card-icon 👤
+        h3 Student Information
+      .info-grid
+        .info-item
+          span.info-label Full Name
+          span.info-value #{student.fullName}
+        .info-item
+          span.info-label Date of Birth
+          span.info-value #{student.dateOfBirth}
+        .info-item
+          span.info-label Gender
+          span.info-value #{student.gender}
+        .info-item
+          span.info-label Country of Birth
+          span.info-value #{student.countryOfBirth}
+        .info-item
+          span.info-label Citizenship
+          span.info-value #{student.citizenship}
+        .info-item
+          span.info-label Religion
+          span.info-value #{student.religion || '—'}
+        .info-item
+          span.info-label Language(s) Spoken
+          span.info-value #{student.languageSpoken}
+
+    //- ── Previous School ───────────────────────────────
+    if student.prevSchoolName
+      .info-card
+        .card-head
+          .card-icon 🏫
+          h3 Previous School
+        .info-grid
+          .info-item
+            span.info-label School Name
+            span.info-value #{student.prevSchoolName}
+          .info-item
+            span.info-label Year Attended
+            span.info-value #{student.prevSchoolYearAttended || '—'}
+          .info-item
+            span.info-label Class/Grade
+            span.info-value #{student.prevSchoolClass || '—'}
+          .info-item
+            span.info-label School Contact
+            span.info-value #{student.prevSchoolContact || '—'}
+
+    //- ── Parents ───────────────────────────────────────
+    .info-card
+      .card-head
+        .card-icon 👩
+        h3 Mother's Details
+      .info-grid
+        .info-item
+          span.info-label Full Name
+          span.info-value #{student.motherFullName || '—'}
+        .info-item
+          span.info-label Occupation
+          span.info-value #{student.motherOccupation || '—'}
+        .info-item
+          span.info-label Phone
+          span.info-value #{student.motherPhone || '—'}
+        .info-item
+          span.info-label Email
+          span.info-value #{student.motherEmail || '—'}
+        .info-item
+          span.info-label Country of Birth
+          span.info-value #{student.motherCountryOfBirth || '—'}
+        .info-item
+          span.info-label Citizenship
+          span.info-value #{student.motherCitizenship || '—'}
+        .info-item
+          span.info-label Religion
+          span.info-value #{student.motherReligion || '—'}
+        .info-item.full-width
+          span.info-label Address
+          span.info-value #{student.motherAddress || '—'}
+
+    .info-card
+      .card-head
+        .card-icon 👨
+        h3 Father's Details
+      .info-grid
+        .info-item
+          span.info-label Full Name
+          span.info-value #{student.fatherFullName || '—'}
+        .info-item
+          span.info-label Occupation
+          span.info-value #{student.fatherOccupation || '—'}
+        .info-item
+          span.info-label Phone
+          span.info-value #{student.fatherPhone || '—'}
+        .info-item
+          span.info-label Email
+          span.info-value #{student.fatherEmail || '—'}
+        .info-item
+          span.info-label Country of Birth
+          span.info-value #{student.fatherCountryOfBirth || '—'}
+        .info-item
+          span.info-label Citizenship
+          span.info-value #{student.fatherCitizenship || '—'}
+        .info-item
+          span.info-label Religion
+          span.info-value #{student.fatherReligion || '—'}
+        .info-item.full-width
+          span.info-label Address
+          span.info-value #{student.fatherAddress || '—'}
+
+    //- ── Emergency & Medical ───────────────────────────
+    .info-card
+      .card-head
+        .card-icon 🚑
+        h3 Emergency Contact & Medical
+      .info-grid
+        .info-item
+          span.info-label Emergency Name
+          span.info-value #{student.emergencyName}
+        .info-item
+          span.info-label Emergency Phone
+          span.info-value #{student.emergencyPhone}
+        .info-item
+          span.info-label Sightless
+          span.info-value #{student.sightless ? 'Yes' : 'No'}
+        .info-item.full-width
+          span.info-label Allergies
+          span.info-value #{student.allergies || 'None reported'}
+        .info-item.full-width
+          span.info-label Disabilities
+          span.info-value #{student.disabilities || 'None reported'}
+
+    //- ── Meta ──────────────────────────────────────────
+    .info-card.meta-card
+      .info-grid
+        .info-item
+          span.info-label Application Submitted
+          span.info-value #{new Date(student.createdAt).toLocaleString('en-GB')}
+        if student.approvedAt
+          .info-item
+            span.info-label Approved On
+            span.info-value #{new Date(student.approvedAt).toLocaleString('en-GB')}
+          .info-item
+            span.info-label Approved By
+            span.info-value #{student.approvedBy}

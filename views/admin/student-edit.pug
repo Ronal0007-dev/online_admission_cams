@@ -1,0 +1,228 @@
+extends ../admin-layout
+
+block content
+  if error && error.length
+    .alert.alert-error
+      i.fas.fa-exclamation-circle
+      |  #{error[0]}
+
+  .edit-header
+    a.back-btn(href=`/admin/students/${student.id}`)
+      i.fas.fa-arrow-left
+      |  Back to Profile
+    h2 Edit – #{student.fullName}
+    span.app-badge ##{student.applicationNumber}
+
+  form.edit-form(action=`/admin/students/${student.id}/edit` method="POST")
+
+    .edit-section
+      .edit-section-title
+        i.fas.fa-user
+        |  Student Information
+      .form-grid
+        .form-group
+          label Full Name *
+          input(type="text" name="fullName" value=student.fullName required)
+        .form-group
+          label Date of Birth *
+          input(type="date" name="dateOfBirth" value=student.dateOfBirth required)
+        .form-group
+          label Gender *
+          select(name="gender" required)
+            option(value="Male" selected=student.gender==='Male') Male
+            option(value="Female" selected=student.gender==='Female') Female
+            option(value="Other" selected=student.gender==='Other') Other
+        .form-group
+          label Country of Birth *
+          .searchable-select-wrap
+            input.searchable-input(
+              type="text"
+              placeholder="Search country..."
+              autocomplete="off"
+              data-target="countryOfBirth"
+              value=student.countryOfBirth || ''
+            )
+            input(type="hidden" name="countryOfBirth" value=student.countryOfBirth || '' required)
+            .dropdown-list
+              each c in countries
+                .dropdown-item(data-value=c) #{c}
+        .form-group
+          label Citizenship *
+          .searchable-select-wrap
+            input.searchable-input(
+              type="text"
+              placeholder="Search citizenship..."
+              autocomplete="off"
+              data-target="citizenship"
+              value=student.citizenship || ''
+            )
+            input(type="hidden" name="citizenship" value=student.citizenship || '' required)
+            .dropdown-list
+              each c in citizenships
+                .dropdown-item(data-value=c) #{c}
+        .form-group
+          label Religion
+          select(name="religion")
+            option(value="" selected=!student.religion) Select religion (optional)
+            each r in religions
+              option(value=r selected=student.religion === r) #{r}
+        .form-group.full-width
+          label Language(s) Spoken *
+          input(type="text" name="languageSpoken" value=student.languageSpoken required)
+
+    .edit-section
+      .edit-section-title
+        i.fas.fa-school
+        |  Previous School (Optional)
+      .form-grid
+        .form-group
+          label School Name
+          input(type="text" name="prevSchoolName" value=student.prevSchoolName || '')
+        .form-group
+          label Year Attended
+          input(type="text" name="prevSchoolYearAttended" value=student.prevSchoolYearAttended || '')
+        .form-group
+          label Class/Grade
+          input(type="text" name="prevSchoolClass" value=student.prevSchoolClass || '')
+        .form-group
+          label School Contact
+          input(type="text" name="prevSchoolContact" value=student.prevSchoolContact || '')
+
+    .edit-section
+      .edit-section-title
+        i.fas.fa-female
+        |  Mother's Details
+      .form-grid
+        .form-group
+          label Full Name
+          input(type="text" name="motherFullName" value=student.motherFullName || '')
+        .form-group
+          label Occupation
+          input(type="text" name="motherOccupation" value=student.motherOccupation || '')
+        .form-group
+          label Phone
+          input(type="tel" name="motherPhone" value=student.motherPhone || '')
+        .form-group
+          label Email
+          input(type="email" name="motherEmail" value=student.motherEmail || '')
+        .form-group
+          label Country of Birth
+          .searchable-select-wrap
+            input.searchable-input(
+              type="text"
+              placeholder="Search country..."
+              autocomplete="off"
+              data-target="motherCountryOfBirth"
+              value=student.motherCountryOfBirth || ''
+            )
+            input(type="hidden" name="motherCountryOfBirth" value=student.motherCountryOfBirth || '')
+            .dropdown-list
+              each c in countries
+                .dropdown-item(data-value=c) #{c}
+        .form-group
+          label Citizenship
+          .searchable-select-wrap
+            input.searchable-input(
+              type="text"
+              placeholder="Search citizenship..."
+              autocomplete="off"
+              data-target="motherCitizenship"
+              value=student.motherCitizenship || ''
+            )
+            input(type="hidden" name="motherCitizenship" value=student.motherCitizenship || '')
+            .dropdown-list
+              each c in citizenships
+                .dropdown-item(data-value=c) #{c}
+        .form-group
+          label Religion
+          select(name="motherReligion")
+            option(value="" selected=!student.motherReligion) Select religion (optional)
+            each r in religions
+              option(value=r selected=student.motherReligion === r) #{r}
+        .form-group.full-width
+          label Address
+          textarea(name="motherAddress" rows="2") #{student.motherAddress || ''}
+
+    .edit-section
+      .edit-section-title
+        i.fas.fa-male
+        |  Father's Details
+      .form-grid
+        .form-group
+          label Full Name
+          input(type="text" name="fatherFullName" value=student.fatherFullName || '')
+        .form-group
+          label Occupation
+          input(type="text" name="fatherOccupation" value=student.fatherOccupation || '')
+        .form-group
+          label Phone
+          input(type="tel" name="fatherPhone" value=student.fatherPhone || '')
+        .form-group
+          label Email
+          input(type="email" name="fatherEmail" value=student.fatherEmail || '')
+        .form-group
+          label Country of Birth
+          .searchable-select-wrap
+            input.searchable-input(
+              type="text"
+              placeholder="Search country..."
+              autocomplete="off"
+              data-target="fatherCountryOfBirth"
+              value=student.fatherCountryOfBirth || ''
+            )
+            input(type="hidden" name="fatherCountryOfBirth" value=student.fatherCountryOfBirth || '')
+            .dropdown-list
+              each c in countries
+                .dropdown-item(data-value=c) #{c}
+        .form-group
+          label Citizenship
+          .searchable-select-wrap
+            input.searchable-input(
+              type="text"
+              placeholder="Search citizenship..."
+              autocomplete="off"
+              data-target="fatherCitizenship"
+              value=student.fatherCitizenship || ''
+            )
+            input(type="hidden" name="fatherCitizenship" value=student.fatherCitizenship || '')
+            .dropdown-list
+              each c in citizenships
+                .dropdown-item(data-value=c) #{c}
+        .form-group
+          label Religion
+          select(name="fatherReligion")
+            option(value="" selected=!student.fatherReligion) Select religion (optional)
+            each r in religions
+              option(value=r selected=student.fatherReligion === r) #{r}
+        .form-group.full-width
+          label Address
+          textarea(name="fatherAddress" rows="2") #{student.fatherAddress || ''}
+
+    .edit-section
+      .edit-section-title
+        i.fas.fa-ambulance
+        |  Emergency & Medical
+      .form-grid
+        .form-group
+          label Emergency Contact Name *
+          input(type="text" name="emergencyName" value=student.emergencyName required)
+        .form-group
+          label Emergency Contact Phone *
+          input(type="tel" name="emergencyPhone" value=student.emergencyPhone required)
+        .form-group.full-width
+          label Allergies
+          textarea(name="allergies" rows="2") #{student.allergies || ''}
+        .form-group.full-width
+          label Disabilities
+          textarea(name="disabilities" rows="2") #{student.disabilities || ''}
+        .form-group.full-width
+          label.checkbox-label
+            input(type="checkbox" name="sightless" checked=student.sightless)
+            .checkmark
+            span Student has visual impairment
+
+    .edit-actions
+      a.btn-cancel(href=`/admin/students/${student.id}`) Cancel
+      button.btn-save(type="submit")
+        i.fas.fa-save
+        |  Save Changes

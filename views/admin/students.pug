@@ -1,0 +1,86 @@
+extends ../admin-layout
+
+block content
+  if success && success.length
+    .alert.alert-success
+      i.fas.fa-check-circle
+      |  #{success[0]}
+  if error && error.length
+    .alert.alert-error
+      i.fas.fa-exclamation-circle
+      |  #{error[0]}
+
+  .filter-bar
+    form.search-form(action="/admin/students" method="GET")
+      .search-wrap
+        i.fas.fa-search
+        input(type="text" name="search" placeholder="Search by name or app number..." value=search || '')
+      .filter-wrap
+        select(name="status" onchange="this.form.submit()")
+          option(value="" selected=!status) All Status
+          option(value="pending" selected=status === 'pending') Pending
+          option(value="approved" selected=status === 'approved') Approved
+          option(value="rejected" selected=status === 'rejected') Rejected
+      button(type="submit").btn-search
+        i.fas.fa-search
+      a.btn-print-list(href=`/admin/students/print${status || search ? '?' : ''}${status ? 'status=' + status : ''}${status && search ? '&' : ''}${search ? 'search=' + search : ''}` target="_blank")
+        i.fas.fa-print
+        |  Print List
+
+  .results-info
+    span Showing #{students.length} of #{total} students
+    if status
+      span.filter-tag
+        | Filtered: #{status}
+        a(href="/admin/students") &times;
+
+  .table-wrap
+    if students.length
+      table.data-table
+        thead
+          tr
+            th App. Number
+            th Full Name
+            th Gender
+            th D.O.B
+            th Applied On
+            th Status
+            th Actions
+        tbody
+          each s in students
+            tr(class=s.status === 'pending' ? 'row-pending' : '')
+              td.app-num #{s.applicationNumber}
+              td
+                strong #{s.fullName}
+              td #{s.gender}
+              td #{s.dateOfBirth}
+              td #{new Date(s.createdAt).toLocaleDateString('en-GB')}
+              td
+                span.badge(class=`badge-${s.status}`) #{s.status}
+              td.actions
+                a.btn-sm.btn-view(href=`/admin/students/${s.id}` title="View")
+                  i.fas.fa-eye
+                a.btn-sm.btn-edit(href=`/admin/students/${s.id}/edit` title="Edit")
+                  i.fas.fa-edit
+                form(action=`/admin/students/${s.id}/delete` method="POST" style="display:inline" onsubmit="return confirm('Delete this student record? This cannot be undone.')")
+                  button.btn-sm.btn-delete(type="submit" title="Delete")
+                    i.fas.fa-trash
+    else
+      .empty-state
+        i.fas.fa-search
+        p No students found matching your criteria.
+        a(href="/admin/students") Clear Filters
+
+  //- Pagination
+  if totalPages > 1
+    .pagination
+      if currentPage > 1
+        a(href=`/admin/students?page=${currentPage - 1}${status ? '&status=' + status : ''}${search ? '&search=' + search : ''}`)
+          i.fas.fa-chevron-left
+      
+      each page in Array.from({length: totalPages}, (_, i) => i + 1)
+        a(href=`/admin/students?page=${page}${status ? '&status=' + status : ''}${search ? '&search=' + search : ''}` class=page === currentPage ? 'active' : '') #{page}
+      
+      if currentPage < totalPages
+        a(href=`/admin/students?page=${currentPage + 1}${status ? '&status=' + status : ''}${search ? '&search=' + search : ''}`)
+          i.fas.fa-chevron-right

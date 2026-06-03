@@ -1,0 +1,55 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Admin Login – Canon Andrea Mwaka International School
+    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css")
+    link(rel="stylesheet" href="/css/admin.css")
+  body.login-body
+    .login-page
+      .login-left
+        .login-brand
+          .brand-logo 🏫
+          h1 Canon Andrea Mwaka International School
+          p Administration Portal
+        .login-decoration
+          .deco-circle.c1
+          .deco-circle.c2
+          .deco-circle.c3
+
+      .login-right
+        .login-card
+          h2 Welcome Back
+          p Sign in to your admin account
+
+          if error && error.length
+            .alert.alert-error
+              i.fas.fa-exclamation-circle
+              |  #{error[0]}
+
+          if success && success.length
+            .alert.alert-success
+              i.fas.fa-check-circle
+              |  #{success[0]}
+
+          form(action="/admin/login" method="POST")
+            .form-group
+              label Email Address
+              .input-icon
+                i.fas.fa-envelope
+                input(type="email" name="email" placeholder="admin@school.com" required)
+
+            .form-group
+              label Password
+              .input-icon
+                i.fas.fa-lock
+                input(type="password" name="password" placeholder="••••••••" required)
+
+            button.btn-login(type="submit")
+              i.fas.fa-sign-in-alt
+              |  Sign In
+
+          .login-back
+            a(href="/") &larr; Back to Admission Portal

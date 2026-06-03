@@ -1,0 +1,72 @@
+extends ../layout
+
+block content
+  .hero
+    nav.hero-nav
+      .nav-logo
+        span.logo-icon 🏫
+        span.logo-text Canon Andrea Mwaka International School
+      .nav-links
+        a(href="/status") Check Status
+        a.btn-apply(href="/apply") Apply Now
+
+    .hero-content
+      .hero-badge
+        i.fas.fa-star
+        |  Admissions Open 2026/2027
+      h1.hero-title
+        | Begin Your 
+        span.highlight Journey
+        |  Here
+      p.hero-subtitle Enroll at Canon Andrea Mwaka International School – where excellence meets opportunity. Our streamlined online admission process makes it easy to secure a place for your child.
+      .hero-cta
+        a.btn-primary(href="/apply")
+          i.fas.fa-pen-to-square
+          |  Start Application
+        a.btn-secondary(href="/status")
+          i.fas.fa-search
+          |  Track Application
+
+    .hero-stats
+      .stat-item
+        span.stat-number 1,200+
+        span.stat-label Students Enrolled
+      .stat-divider
+      .stat-item
+        span.stat-number 95%
+        span.stat-label Acceptance Rate
+      .stat-divider
+      .stat-item
+        span.stat-number 70+
+        span.stat-label Years of Excellence
+
+  section.features
+    .section-header
+      h2 Simple. Fast. Secure.
+      p Everything you need to apply in one place
+    .features-grid
+      .feature-card
+        .feature-icon
+          i.fas.fa-clipboard-list
+        h3 Easy Application
+        p Fill out our comprehensive online form with all required information in one session.
+      .feature-card
+        .feature-icon
+          i.fas.fa-clock
+        h3 Quick Processing
+        p Our admissions team reviews applications promptly and keeps you informed at every step.
+      .feature-card
+        .feature-icon
+          i.fas.fa-envelope-open-text
+        h3 Email Notifications
+        p Receive instant email confirmation once your application is reviewed and approved.
+      .feature-card
+        .feature-icon
+          i.fas.fa-shield-alt
+        h3 Secure & Private
+        p Your child's information is protected with industry-standard security measures.
+
+  footer.site-footer
+    p &copy; 2024 Canon Andrea Mwaka International School. All rights reserved.
+    p
+      a(href="/admin/login") Admin Login
