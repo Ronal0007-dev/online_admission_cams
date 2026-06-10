@@ -1047,3 +1047,19 @@ button { font-family: var(--font); }
 .dropdown-list::-webkit-scrollbar { width: 6px; }
 .dropdown-list::-webkit-scrollbar-track { background: #f8fafc; }
 .dropdown-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+
+/* ── STUDENT PRINT BUTTON ───────────────────────────────── */
+.btn-print-student {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #1e293b;
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.btn-print-student:hover { background: #0f172a; }

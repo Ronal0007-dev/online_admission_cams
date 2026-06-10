@@ -155,6 +155,30 @@ router.get('/students', requireAuth, async (req, res) => {
   }
 });
 
+// ─── PRINT INDIVIDUAL STUDENT ────────────────────────────
+router.get('/students/:id/print', requireAuth, async (req, res) => {
+  try {
+    const student = await Student.findByPk(req.params.id);
+    if (!student) {
+      req.flash('error', 'Student not found.');
+      return res.redirect('/admin/students');
+    }
+    res.render('admin/student-print', {
+      title: `Print – ${student.fullName}`,
+      admin: req.session.admin,
+      student,
+      printDate: new Date().toLocaleString('en-GB', {
+        day: '2-digit', month: 'long', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      })
+    });
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Failed to generate print view.');
+    res.redirect(`/admin/students/${req.params.id}`);
+  }
+});
+
 // ─── VIEW STUDENT ─────────────────────────────────────────
 router.get('/students/:id', requireAuth, async (req, res) => {
   try {

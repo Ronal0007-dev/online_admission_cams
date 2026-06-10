@@ -899,3 +899,42 @@ label.required::after,
 .dropdown-list::-webkit-scrollbar { width: 6px; }
 .dropdown-list::-webkit-scrollbar-track { background: #f8fafc; }
 .dropdown-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+
+/* ── FORM VALIDATION ERRORS ─────────────────────────────── */
+.field-error,
+input.field-error,
+select.field-error,
+.searchable-input.field-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+  background-color: #fff5f5;
+}
+
+.field-error-msg {
+  display: block;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-error-msg::before {
+  content: '⚠';
+  font-size: 11px;
+}
+
+/* Shake animation for invalid sections */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+
+.section-shake {
+  animation: shake 0.4s ease;
+}

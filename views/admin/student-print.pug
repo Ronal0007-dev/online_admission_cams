@@ -1,0 +1,608 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Print – #{student.fullName}
+    link(href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css")
+    style.
+      :root {
+        --primary: #1a3c6e;
+        --primary-light: #2d6bcf;
+        --text: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --bg: #f8fafc;
+        --green: #16a34a;
+        --amber: #d97706;
+        --red: #dc2626;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        color: var(--text);
+        background: #fff;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      a { text-decoration: none; color: inherit; }
+
+      /* ── Screen toolbar ─────────────────────────────── */
+      .print-toolbar {
+        background: var(--primary);
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .toolbar-brand {
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .toolbar-label {
+        font-size: 13px;
+        color: rgba(255,255,255,0.6);
+      }
+
+      .toolbar-actions { display: flex; gap: 10px; }
+
+      .btn-print {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 20px;
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-print:hover { background: #16a34a; }
+
+      .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 20px;
+        background: rgba(255,255,255,0.12);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s;
+      }
+      .btn-back:hover { background: rgba(255,255,255,0.2); }
+
+      /* ── Document ───────────────────────────────────── */
+      .print-doc {
+        max-width: 900px;
+        margin: 32px auto;
+        padding: 0 32px 60px;
+      }
+
+      /* Letterhead */
+      .doc-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-bottom: 20px;
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: 28px;
+      }
+
+      .school-brand { display: flex; align-items: center; gap: 14px; }
+
+      .school-logo {
+        width: 64px; height: 64px;
+        background: var(--primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        flex-shrink: 0;
+      }
+
+      .school-info h1 { font-size: 22px; font-weight: 800; color: var(--primary); }
+      .school-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+      .doc-meta { text-align: right; }
+      .doc-meta .report-title { font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+      .doc-meta p { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+
+      /* Student hero */
+      .student-hero {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        background: linear-gradient(135deg, #eff6ff, #dbeafe);
+        border: 1px solid #bfdbfe;
+        border-radius: 12px;
+        padding: 24px 28px;
+        margin-bottom: 28px;
+      }
+
+      .student-avatar {
+        width: 72px; height: 72px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        flex-shrink: 0;
+        border: 3px solid white;
+        box-shadow: 0 4px 12px rgba(26,60,110,0.25);
+      }
+
+      .student-hero-info { flex: 1; }
+      .student-hero-info h2 { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+      .student-hero-info .app-ref { font-size: 13px; color: var(--text-muted); font-family: monospace; font-weight: 600; }
+
+      .hero-chips { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+      .chip-blue { background: #dbeafe; color: #1e40af; }
+      .chip-purple { background: #ede9fe; color: #6d28d9; }
+      .chip-gray { background: #f1f5f9; color: #475569; }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 16px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .status-pending { background: #fef3c7; color: #92400e; }
+      .status-approved { background: #dcfce7; color: #065f46; }
+      .status-rejected { background: #fee2e2; color: #991b1b; }
+
+      /* Sections */
+      .section-block {
+        margin-bottom: 24px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        page-break-inside: avoid;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: var(--primary);
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .section-head i { font-size: 14px; opacity: 0.85; }
+
+      .section-body { padding: 0; }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+      }
+
+      .info-item {
+        padding: 11px 18px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .info-item:nth-child(3n) { border-right: none; }
+      .info-item.span-2 { grid-column: span 2; }
+      .info-item.span-3 { grid-column: span 3; border-right: none; }
+
+      .info-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 3px;
+        display: block;
+      }
+
+      .info-value {
+        font-size: 13px;
+        color: var(--text);
+        font-weight: 500;
+      }
+
+      .info-value.empty { color: #94a3b8; font-style: italic; }
+
+      /* Two-column parent layout */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .two-col .section-block { margin-bottom: 0; }
+
+      /* Medical flags */
+      .medical-flags {
+        display: flex;
+        gap: 12px;
+        padding: 12px 18px;
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+      }
+
+      .flag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .flag-yes { background: #fee2e2; color: #991b1b; }
+      .flag-no  { background: #f0fdf4; color: #166534; }
+
+      /* Approval block */
+      .approval-block {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .approval-icon {
+        width: 36px; height: 36px;
+        background: #22c55e;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      .approval-info h4 { font-size: 14px; font-weight: 700; color: #065f46; margin-bottom: 4px; }
+      .approval-info p  { font-size: 12px; color: #166534; }
+
+      /* Footer */
+      .doc-footer {
+        margin-top: 36px;
+        padding-top: 16px;
+        border-top: 2px solid var(--border);
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+        align-items: end;
+      }
+
+      .footer-col p { font-size: 11px; color: var(--text-muted); line-height: 1.7; }
+
+      .signature-block { text-align: center; }
+      .signature-line { border-top: 1px solid #94a3b8; margin-bottom: 4px; }
+      .signature-label { font-size: 11px; color: var(--text-muted); }
+
+      /* ── Print media ────────────────────────────────── */
+      @media print {
+        @page { size: A4 portrait; margin: 12mm 12mm 14mm 12mm; }
+
+        .print-toolbar { display: none !important; }
+
+        body { font-size: 11.5px; }
+
+        .print-doc { margin: 0; padding: 0; max-width: 100%; }
+
+        .section-head {
+          background: var(--primary) !important;
+          color: white !important;
+        }
+
+        .student-hero {
+          background: linear-gradient(135deg, #eff6ff, #dbeafe) !important;
+        }
+
+        .status-pending  { background: #fef3c7 !important; color: #92400e !important; }
+        .status-approved { background: #dcfce7 !important; color: #065f46 !important; }
+        .status-rejected { background: #fee2e2 !important; color: #991b1b !important; }
+
+        .flag-yes { background: #fee2e2 !important; color: #991b1b !important; }
+        .flag-no  { background: #f0fdf4 !important; color: #166534 !important; }
+
+        .approval-block {
+          background: #f0fdf4 !important;
+          border-color: #bbf7d0 !important;
+        }
+
+        .approval-icon { background: #22c55e !important; }
+
+        .section-block { page-break-inside: avoid; }
+        .two-col { page-break-inside: avoid; }
+      }
+
+  body
+    //- Toolbar
+    .print-toolbar
+      .toolbar-left
+        .toolbar-brand
+          span 🏫
+          span Canon Andrea Mwaka International School
+        span.toolbar-label Student Profile – Print Preview
+      .toolbar-actions
+        a.btn-back(href=`/admin/students/${student.id}`)
+          i.fas.fa-arrow-left
+          |  Back
+        button.btn-print(onclick="window.print()")
+          i.fas.fa-print
+          |  Print / Save as PDF
+
+    //- Document
+    .print-doc
+
+      //- Letterhead
+      .doc-header
+        .school-brand
+          .school-logo 🏫
+          .school-info
+            h1 Canon Andrea Mwaka International School
+            p Official Admissions Office
+            p Tel: +255 747 048 991 &nbsp;|&nbsp; info@dodomacams.org
+        .doc-meta
+          p.report-title Student Admission Profile
+          p Application No: 
+            strong #{student.applicationNumber}
+          p Generated: #{printDate}
+          p Prepared by: #{admin.name}
+
+      //- Student hero
+      .student-hero
+        .student-avatar #{student.fullName.charAt(0).toUpperCase()}
+        .student-hero-info
+          h2 #{student.fullName}
+          p.app-ref APP # #{student.applicationNumber}
+          .hero-chips
+            span.chip.chip-blue
+              i.fas.fa-venus-mars
+              | #{student.gender}
+            span.chip.chip-purple
+              i.fas.fa-birthday-cake
+              | #{student.dateOfBirth}
+            span.chip.chip-gray
+              i.fas.fa-globe
+              | #{student.citizenship}
+        .status-pill(class=`status-${student.status}`)
+          - const statusIcons = { pending: '⏳', approved: '✅', rejected: '❌' }
+          | #{statusIcons[student.status]} #{student.status.charAt(0).toUpperCase() + student.status.slice(1)}
+
+      //- If approved, show approval info
+      if student.status === 'approved' && student.approvedAt
+        .approval-block
+          .approval-icon
+            i.fas.fa-check
+          .approval-info
+            h4 Application Approved
+            p Approved on #{new Date(student.approvedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })} by #{student.approvedBy}
+
+      //- ── Section 1: Student Information ──────────────
+      .section-block
+        .section-head
+          i.fas.fa-user
+          | Student Information
+        .section-body
+          .info-grid
+            .info-item
+              span.info-label Full Name
+              span.info-value #{student.fullName}
+            .info-item
+              span.info-label Date of Birth
+              span.info-value #{student.dateOfBirth}
+            .info-item
+              span.info-label Gender
+              span.info-value #{student.gender}
+            .info-item
+              span.info-label Country of Birth
+              span.info-value #{student.countryOfBirth}
+            .info-item
+              span.info-label Citizenship
+              span.info-value #{student.citizenship}
+            .info-item
+              span.info-label Religion
+              span.info-value #{student.religion || '—'}
+            .info-item.span-3
+              span.info-label Language(s) Spoken
+              span.info-value #{student.languageSpoken}
+
+      //- ── Section 2: Previous School ──────────────────
+      if student.prevSchoolName
+        .section-block
+          .section-head
+            i.fas.fa-school
+            | Previous School Attended
+          .section-body
+            .info-grid
+              .info-item
+                span.info-label School Name
+                span.info-value #{student.prevSchoolName}
+              .info-item
+                span.info-label Year Attended
+                span.info-value #{student.prevSchoolYearAttended || '—'}
+              .info-item
+                span.info-label Class / Grade
+                span.info-value #{student.prevSchoolClass || '—'}
+              .info-item.span-3
+                span.info-label School Contact
+                span.info-value #{student.prevSchoolContact || '—'}
+
+      //- ── Section 3: Parents ──────────────────────────
+      .two-col
+        .section-block
+          .section-head
+            i.fas.fa-female
+            | Mother's Details
+          .section-body
+            .info-grid
+              .info-item.span-2
+                span.info-label Full Name
+                span.info-value #{student.motherFullName || '—'}
+              .info-item
+                span.info-label Phone
+                span.info-value #{student.motherPhone || '—'}
+              .info-item.span-3
+                span.info-label Email
+                span.info-value #{student.motherEmail || '—'}
+              .info-item
+                span.info-label Occupation
+                span.info-value #{student.motherOccupation || '—'}
+              .info-item
+                span.info-label Country of Birth
+                span.info-value #{student.motherCountryOfBirth || '—'}
+              .info-item
+                span.info-label Citizenship
+                span.info-value #{student.motherCitizenship || '—'}
+              .info-item
+                span.info-label Religion
+                span.info-value #{student.motherReligion || '—'}
+              .info-item.span-2
+                span.info-label &nbsp;
+                span.info-value &nbsp;
+              .info-item.span-3
+                span.info-label Physical Address
+                span.info-value #{student.motherAddress || '—'}
+
+        .section-block
+          .section-head
+            i.fas.fa-male
+            | Father's Details
+          .section-body
+            .info-grid
+              .info-item.span-2
+                span.info-label Full Name
+                span.info-value #{student.fatherFullName || '—'}
+              .info-item
+                span.info-label Phone
+                span.info-value #{student.fatherPhone || '—'}
+              .info-item.span-3
+                span.info-label Email
+                span.info-value #{student.fatherEmail || '—'}
+              .info-item
+                span.info-label Occupation
+                span.info-value #{student.fatherOccupation || '—'}
+              .info-item
+                span.info-label Country of Birth
+                span.info-value #{student.fatherCountryOfBirth || '—'}
+              .info-item
+                span.info-label Citizenship
+                span.info-value #{student.fatherCitizenship || '—'}
+              .info-item
+                span.info-label Religion
+                span.info-value #{student.fatherReligion || '—'}
+              .info-item.span-2
+                span.info-label &nbsp;
+                span.info-value &nbsp;
+              .info-item.span-3
+                span.info-label Physical Address
+                span.info-value #{student.fatherAddress || '—'}
+
+      //- ── Section 4: Emergency & Medical ──────────────
+      .section-block
+        .section-head
+          i.fas.fa-ambulance
+          | Emergency Contact & Medical History
+        .section-body
+          .info-grid
+            .info-item.span-2
+              span.info-label Emergency Contact Name
+              span.info-value #{student.emergencyName}
+            .info-item
+              span.info-label Emergency Phone
+              span.info-value #{student.emergencyPhone}
+          .medical-flags
+            span.flag(class=student.sightless ? 'flag-yes' : 'flag-no')
+              i(class=student.sightless ? 'fas fa-exclamation-circle' : 'fas fa-check-circle')
+              | Visual Impairment: #{student.sightless ? 'Yes' : 'No'}
+            span.flag(class=(student.allergies && student.allergies.trim()) ? 'flag-yes' : 'flag-no')
+              i(class=(student.allergies && student.allergies.trim()) ? 'fas fa-exclamation-circle' : 'fas fa-check-circle')
+              | Allergies: #{(student.allergies && student.allergies.trim()) ? 'Yes' : 'None'}
+            span.flag(class=(student.disabilities && student.disabilities.trim()) ? 'flag-yes' : 'flag-no')
+              i(class=(student.disabilities && student.disabilities.trim()) ? 'fas fa-exclamation-circle' : 'fas fa-check-circle')
+              | Disabilities: #{(student.disabilities && student.disabilities.trim()) ? 'Yes' : 'None'}
+          .info-grid
+            .info-item.span-3
+              span.info-label Allergies Detail
+              span.info-value(class=(!student.allergies || !student.allergies.trim()) ? 'empty' : '') #{student.allergies || 'None reported'}
+            .info-item.span-3
+              span.info-label Disabilities Detail
+              span.info-value(class=(!student.disabilities || !student.disabilities.trim()) ? 'empty' : '') #{student.disabilities || 'None reported'}
+
+      //- Footer
+      .doc-footer
+        .footer-col
+          p Canon Andrea Mwaka International School – Confidential Document
+          p This document contains sensitive personal information.
+          p Do not distribute without authorization.
+        .footer-col
+          .signature-block
+            .signature-line
+            p.signature-label Class Teacher / Form Teacher
+        .footer-col
+          .signature-block
+            .signature-line
+            p.signature-label Principal / Head of School

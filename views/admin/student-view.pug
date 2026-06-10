@@ -20,6 +20,9 @@ block content
       .app-badge Application ##{student.applicationNumber}
     .view-actions
       span.badge.badge-lg(class=`badge-${student.status}`) #{student.status}
+      a.btn-print-student(href=`/admin/students/${student.id}/print` target="_blank")
+        i.fas.fa-print
+        |  Print
       a.btn-edit(href=`/admin/students/${student.id}/edit`)
         i.fas.fa-edit
         |  Edit
