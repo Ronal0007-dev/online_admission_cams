@@ -5,11 +5,43 @@ block content
     .success-card
       .success-icon ✅
       h1 Application Submitted!
-      p Your admission application has been successfully received.
+      p.sub-text Your admission application has been successfully received and is now under review.
+
       .app-number-box
         span Application Number
         strong #{applicationNumber}
-      p.note Please save your application number. You will need it to track your application status.
+
+      //- Email notification status
+      if emailSent && parentEmail
+        .email-notice.email-sent
+          .email-notice-icon 📧
+          .email-notice-body
+            strong Confirmation email sent!
+            p We've sent a detailed confirmation to
+              span.email-addr  #{parentEmail}
+            p.email-tip Keep your application number handy — you'll need it to track your status.
+      else
+        .email-notice.email-warn
+          .email-notice-icon ⚠️
+          .email-notice-body
+            strong No confirmation email sent
+            p No parent email address was provided. Please save your application number below.
+
+      .divider
+
+      .next-steps
+        h3 What happens next?
+        .step-list
+          .step-item
+            .step-dot 1
+            p Our admissions team will review your application.
+          .step-item
+            .step-dot 2
+            p You'll receive an email notification once a decision is made.
+          .step-item
+            .step-dot 3
+            p If approved, visit the school office with required documents within 7 working days.
+
       .success-actions
         a.btn-primary(href="/status")
           i.fas.fa-search

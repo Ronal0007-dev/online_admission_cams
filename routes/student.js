@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Student = require('../models/Student');
 const { countries, citizenships, religions } = require('../config/lookups');
+const { sendSubmissionEmail } = require('../config/mailer');
 
 function generateAppNumber() {
   const year = new Date().getFullYear();
@@ -53,7 +54,7 @@ router.post('/apply', async (req, res) => {
 
   try {
     const applicationNumber = generateAppNumber();
-    await Student.create({
+    const newStudent = await Student.create({
       applicationNumber,
       fullName: body.fullName,
       dateOfBirth: body.dateOfBirth,
@@ -89,9 +90,22 @@ router.post('/apply', async (req, res) => {
       disabilities: body.disabilities
     });
 
+    // Send confirmation email to parent(s)
+    let emailSent = false;
+    let emailError = null;
+    try {
+      await sendSubmissionEmail(newStudent);
+      emailSent = true;
+    } catch (emailErr) {
+      console.error('Submission email failed:', emailErr.message);
+      emailError = emailErr.message;
+    }
+
     res.render('student/success', {
       title: 'Application Submitted',
-      applicationNumber
+      applicationNumber,
+      emailSent,
+      parentEmail: newStudent.motherEmail || newStudent.fatherEmail || null
     });
   } catch (err) {
     console.error(err);
