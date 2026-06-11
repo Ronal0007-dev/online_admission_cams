@@ -63,6 +63,7 @@ async function start() {
     console.log('✅ Database tables synced');
 
     //deleted 
+    
 
     app.listen(PORT, () => {
       console.log(`\n🏫 School Admission System running at http://localhost:${PORT}`);

@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const schoolName = process.env.SCHOOL_NAME || 'Greenfield Academy';
+const schoolName = process.env.SCHOOL_NAME || 'Canon Andrea Mwaka International School';
 
 async function sendApprovalEmail(student) {
   const mailOptions = {
