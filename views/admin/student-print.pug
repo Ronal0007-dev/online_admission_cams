@@ -384,7 +384,7 @@ html(lang="en")
       .toolbar-left
         .toolbar-brand
           span 🏫
-          span Canon Andrea Mwaka International School
+          span Greenfield Academy
         span.toolbar-label Student Profile – Print Preview
       .toolbar-actions
         a.btn-back(href=`/admin/students/${student.id}`)
@@ -402,9 +402,9 @@ html(lang="en")
         .school-brand
           .school-logo 🏫
           .school-info
-            h1 Canon Andrea Mwaka International School
+            h1 Greenfield Academy
             p Official Admissions Office
-            p Tel: +255 747 048 991 &nbsp;|&nbsp; info@dodomacams.org
+            p Tel: +255 000 000 000 &nbsp;|&nbsp; admissions@greenfield.edu
         .doc-meta
           p.report-title Student Admission Profile
           p Application No: 
@@ -428,6 +428,9 @@ html(lang="en")
             span.chip.chip-gray
               i.fas.fa-globe
               | #{student.citizenship}
+            span.chip.chip-blue
+              i.fas.fa-graduation-cap
+              | #{student.classLevel}
         .status-pill(class=`status-${student.status}`)
           - const statusIcons = { pending: '⏳', approved: '✅', rejected: '❌' }
           | #{statusIcons[student.status]} #{student.status.charAt(0).toUpperCase() + student.status.slice(1)}
@@ -466,6 +469,9 @@ html(lang="en")
             .info-item
               span.info-label Religion
               span.info-value #{student.religion || '—'}
+            .info-item
+              span.info-label Class Level
+              span.info-value #{student.classLevel}
             .info-item.span-3
               span.info-label Language(s) Spoken
               span.info-value #{student.languageSpoken}
@@ -595,7 +601,7 @@ html(lang="en")
       //- Footer
       .doc-footer
         .footer-col
-          p Canon Andrea Mwaka International School – Confidential Document
+          p Greenfield Academy – Confidential Document
           p This document contains sensitive personal information.
           p Do not distribute without authorization.
         .footer-col

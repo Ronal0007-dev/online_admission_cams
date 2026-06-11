@@ -5,7 +5,7 @@ const Student = require('../models/Student');
 const { requireAuth, redirectIfAuth } = require('../middleware/auth');
 const { sendApprovalEmail } = require('../config/mailer');
 const { Op } = require('sequelize');
-const { countries, citizenships, religions } = require('../config/lookups');
+const { countries, citizenships, religions, classLevels } = require('../config/lookups');
 
 // ─── LOGIN ───────────────────────────────────────────────
 router.get('/login', redirectIfAuth, (req, res) => {
@@ -216,6 +216,7 @@ router.get('/students/:id/edit', requireAuth, async (req, res) => {
       countries,
       citizenships,
       religions,
+      classLevels,
       error: req.flash('error'),
       success: req.flash('success')
     });
@@ -241,6 +242,7 @@ router.post('/students/:id/edit', requireAuth, async (req, res) => {
       countryOfBirth: body.countryOfBirth,
       citizenship: body.citizenship,
       religion: body.religion,
+      classLevel: body.classLevel,
       languageSpoken: body.languageSpoken,
       prevSchoolName: body.prevSchoolName || null,
       prevSchoolYearAttended: body.prevSchoolYearAttended || null,

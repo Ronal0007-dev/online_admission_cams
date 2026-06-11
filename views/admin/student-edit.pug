@@ -66,6 +66,12 @@ block content
             option(value="" selected=!student.religion) Select religion (optional)
             each r in religions
               option(value=r selected=student.religion === r) #{r}
+        .form-group
+          label Class Level to Join *
+          select(name="classLevel" required)
+            option(value="" disabled selected=!student.classLevel) Select class level
+            each cl in classLevels
+              option(value=cl selected=student.classLevel === cl) #{cl}
         .form-group.full-width
           label Language(s) Spoken *
           input(type="text" name="languageSpoken" value=student.languageSpoken required)

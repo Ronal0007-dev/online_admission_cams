@@ -371,9 +371,9 @@ html(lang="en")
         .school-brand
           .school-logo 🏫
           .school-info
-            h1 Canon Andrea Mwaka International School
+            h1 Greenfield Academy
             p Official Admissions Office
-            p Tel: +255 747 048 991 &nbsp;|&nbsp; info@dodomacams.org
+            p Tel: +255 000 000 000 &nbsp;|&nbsp; admissions@greenfield.edu
         .doc-meta
           p.report-title Student Admissions Report
           p Generated: #{printDate}
@@ -415,6 +415,7 @@ html(lang="en")
             th Application No.
             th Full Name
             th Gender
+            th Class Level
             th Date of Birth
             th Citizenship
             th Emergency Contact
@@ -431,6 +432,7 @@ html(lang="en")
                   if s.motherEmail || s.fatherEmail
                     p.student-sub #{s.motherEmail || s.fatherEmail}
                 td #{s.gender}
+                td #{s.classLevel}
                 td #{s.dateOfBirth}
                 td #{s.citizenship}
                 td
@@ -441,12 +443,12 @@ html(lang="en")
                   span.badge(class=`badge-${s.status}`) #{s.status}
           else
             tr.empty-row
-              td(colspan="9") No students found.
+              td(colspan="10") No students found.
 
       //- Footer
       .doc-footer
         div
-          p Canon Andrea Mwaka International School – Confidential Document
+          p Greenfield Academy – Confidential Document
           p This document contains personal information and should be handled accordingly.
           p Total records printed: #{students.length}
         .signature-block

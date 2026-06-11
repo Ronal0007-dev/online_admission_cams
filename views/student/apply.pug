@@ -98,6 +98,13 @@ block content
                 each r in religions
                   option(value=r selected=formData.religion === r) #{r}
 
+            .form-group
+              label.required Class Level to Join
+              select(name="classLevel" required)
+                option(value="" disabled selected=!formData.classLevel) Select class level
+                each cl in classLevels
+                  option(value=cl selected=formData.classLevel === cl) #{cl}
+
             .form-group.full-width
               label.required Language(s) Spoken
               input(type="text" name="languageSpoken" placeholder="e.g. English, Swahili, French" value=formData.languageSpoken || '' required)
@@ -155,16 +162,16 @@ block content
             h3.parent-subheading Mother's Information
             .form-grid
               .form-group
-                label Full Name
+                label.required Full Name
                 input(type="text" name="motherFullName" placeholder="Mother's full name" value=formData.motherFullName || '')
               .form-group
-                label Occupation
+                label.required Occupation
                 input(type="text" name="motherOccupation" placeholder="e.g. Teacher" value=formData.motherOccupation || '')
               .form-group.full-width
-                label Physical Address
+                label.required Physical Address
                 textarea(name="motherAddress" rows="2" placeholder="Street address, city") #{formData.motherAddress || ''}
               .form-group
-                label Country of Birth
+                label.required Country of Birth
                 .searchable-select-wrap
                   input.searchable-input(
                     type="text"
@@ -178,7 +185,7 @@ block content
                     each c in countries
                       .dropdown-item(data-value=c) #{c}
               .form-group
-                label Citizenship
+                label.required Citizenship
                 .searchable-select-wrap
                   input.searchable-input(
                     type="text"
@@ -198,26 +205,26 @@ block content
                   each r in religions
                     option(value=r selected=formData.motherReligion === r) #{r}
               .form-group
-                label Phone Number
+                label.required Phone Number
                 input(type="tel" name="motherPhone" placeholder="+255 700 000 000" value=formData.motherPhone || '')
               .form-group
-                label Email Address
+                label.required Email Address
                 input(type="email" name="motherEmail" placeholder="mother@email.com" value=formData.motherEmail || '')
 
           .parent-panel#father
             h3.parent-subheading Father's Information
             .form-grid
               .form-group
-                label Full Name
+                label.required Full Name
                 input(type="text" name="fatherFullName" placeholder="Father's full name" value=formData.fatherFullName || '')
               .form-group
-                label Occupation
+                label.required Occupation
                 input(type="text" name="fatherOccupation" placeholder="e.g. Engineer" value=formData.fatherOccupation || '')
               .form-group.full-width
-                label Physical Address
+                label.required Physical Address
                 textarea(name="fatherAddress" rows="2" placeholder="Street address, city") #{formData.fatherAddress || ''}
               .form-group
-                label Country of Birth
+                label.required Country of Birth
                 .searchable-select-wrap
                   input.searchable-input(
                     type="text"
@@ -231,7 +238,7 @@ block content
                     each c in countries
                       .dropdown-item(data-value=c) #{c}
               .form-group
-                label Citizenship
+                label.required Citizenship
                 .searchable-select-wrap
                   input.searchable-input(
                     type="text"
@@ -251,10 +258,10 @@ block content
                   each r in religions
                     option(value=r selected=formData.fatherReligion === r) #{r}
               .form-group
-                label Phone Number
+                label.required Phone Number
                 input(type="tel" name="fatherPhone" placeholder="+255 700 000 000" value=formData.fatherPhone || '')
               .form-group
-                label Email Address
+                label.required Email Address
                 input(type="email" name="fatherEmail" placeholder="father@email.com" value=formData.fatherEmail || '')
 
           .section-nav

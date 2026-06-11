@@ -42,6 +42,7 @@ block content
             th App. Number
             th Full Name
             th Gender
+            th Class Level
             th D.O.B
             th Applied On
             th Status
@@ -53,6 +54,7 @@ block content
               td
                 strong #{s.fullName}
               td #{s.gender}
+              td #{s.classLevel}
               td #{s.dateOfBirth}
               td #{new Date(s.createdAt).toLocaleDateString('en-GB')}
               td

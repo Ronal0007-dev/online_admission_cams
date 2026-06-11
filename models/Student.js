@@ -20,6 +20,14 @@ const Student = sequelize.define('Student', {
   countryOfBirth: { type: DataTypes.STRING(100), allowNull: false },
   citizenship: { type: DataTypes.STRING(100), allowNull: false },
   religion: { type: DataTypes.STRING(100) },
+  classLevel: {
+    type: DataTypes.ENUM(
+      'Nursery','Reception',
+      'Stage 1','Stage 2','Stage 3','Stage 4','Stage 5','Stage 6',
+      'Year 7','Year 8','Year 9','Year 10','Year 11','Year 12','Year 13'
+    ),
+    allowNull: false
+  },
   languageSpoken: { type: DataTypes.STRING(200), allowNull: false },
 
   // === PREVIOUS SCHOOL (OPTIONAL) ===

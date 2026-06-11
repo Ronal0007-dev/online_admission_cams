@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Student = require('../models/Student');
-const { countries, citizenships, religions } = require('../config/lookups');
+const { countries, citizenships, religions, classLevels } = require('../config/lookups');
 const { sendSubmissionEmail } = require('../config/mailer');
 
 function generateAppNumber() {
@@ -23,7 +23,8 @@ router.get('/apply', (req, res) => {
     formData: {},
     countries,
     citizenships,
-    religions
+    religions,
+    classLevels
   });
 });
 
@@ -38,6 +39,22 @@ router.post('/apply', async (req, res) => {
   if (!body.countryOfBirth) errors.push('Country of birth is required.');
   if (!body.citizenship) errors.push('Citizenship is required.');
   if (!body.languageSpoken) errors.push('Language spoken is required.');
+  // Mother required
+  if (!body.motherFullName) errors.push("Mother's full name is required.");
+  if (!body.motherOccupation) errors.push("Mother's occupation is required.");
+  if (!body.motherAddress) errors.push("Mother's physical address is required.");
+  if (!body.motherCountryOfBirth) errors.push("Mother's country of birth is required.");
+  if (!body.motherCitizenship) errors.push("Mother's citizenship is required.");
+  if (!body.motherPhone) errors.push("Mother's phone number is required.");
+  if (!body.motherEmail) errors.push("Mother's email address is required.");
+  // Father required
+  if (!body.fatherFullName) errors.push("Father's full name is required.");
+  if (!body.fatherOccupation) errors.push("Father's occupation is required.");
+  if (!body.fatherAddress) errors.push("Father's physical address is required.");
+  if (!body.fatherCountryOfBirth) errors.push("Father's country of birth is required.");
+  if (!body.fatherCitizenship) errors.push("Father's citizenship is required.");
+  if (!body.fatherPhone) errors.push("Father's phone number is required.");
+  if (!body.fatherEmail) errors.push("Father's email address is required.");
   if (!body.emergencyName) errors.push('Emergency contact name is required.');
   if (!body.emergencyPhone) errors.push('Emergency contact phone is required.');
 
@@ -62,6 +79,7 @@ router.post('/apply', async (req, res) => {
       countryOfBirth: body.countryOfBirth,
       citizenship: body.citizenship,
       religion: body.religion,
+      classLevel: body.classLevel,
       languageSpoken: body.languageSpoken,
       prevSchoolName: body.prevSchoolName || null,
       prevSchoolYearAttended: body.prevSchoolYearAttended || null,

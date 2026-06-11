@@ -85,4 +85,24 @@ const religions = [
   'Other'
 ];
 
-module.exports = { countries, citizenships, religions };
+// exported at bottom
+
+const classLevels = [
+  'Nursery',
+  'Reception',
+  'Stage 1',
+  'Stage 2',
+  'Stage 3',
+  'Stage 4',
+  'Stage 5',
+  'Stage 6',
+  'Year 7',
+  'Year 8',
+  'Year 9',
+  'Year 10',
+  'Year 11',
+  'Year 12',
+  'Year 13'
+];
+
+module.exports = { countries, citizenships, religions, classLevels };

@@ -12,10 +12,28 @@ const sectionRules = {
     { name: 'gender',         label: 'Gender' },
     { name: 'countryOfBirth', label: 'Country of Birth', hidden: true },
     { name: 'citizenship',    label: 'Citizenship',      hidden: true },
+    { name: 'classLevel',    label: 'Class Level to Join' },
     { name: 'languageSpoken', label: 'Language(s) Spoken' }
   ],
   2: [],  // entirely optional
-  3: [],  // parent info — optional
+  3: [
+    // Mother — required fields
+    { name: 'motherFullName',       label: "Mother's Full Name",       tab: 'mother' },
+    { name: 'motherOccupation',     label: "Mother's Occupation",      tab: 'mother' },
+    { name: 'motherAddress',        label: "Mother's Physical Address", tab: 'mother' },
+    { name: 'motherCountryOfBirth', label: "Mother's Country of Birth", tab: 'mother', hidden: true },
+    { name: 'motherCitizenship',    label: "Mother's Citizenship",      tab: 'mother', hidden: true },
+    { name: 'motherPhone',          label: "Mother's Phone Number",     tab: 'mother' },
+    { name: 'motherEmail',          label: "Mother's Email Address",    tab: 'mother' },
+    // Father — required fields
+    { name: 'fatherFullName',       label: "Father's Full Name",       tab: 'father' },
+    { name: 'fatherOccupation',     label: "Father's Occupation",      tab: 'father' },
+    { name: 'fatherAddress',        label: "Father's Physical Address", tab: 'father' },
+    { name: 'fatherCountryOfBirth', label: "Father's Country of Birth", tab: 'father', hidden: true },
+    { name: 'fatherCitizenship',    label: "Father's Citizenship",      tab: 'father', hidden: true },
+    { name: 'fatherPhone',          label: "Father's Phone Number",     tab: 'father' },
+    { name: 'fatherEmail',          label: "Father's Email Address",    tab: 'father' }
+  ],
   4: [
     { name: 'emergencyName',  label: 'Emergency Contact Name' },
     { name: 'emergencyPhone', label: 'Emergency Contact Phone' }
@@ -27,6 +45,8 @@ const sectionRules = {
 function clearErrors(sectionEl) {
   sectionEl.querySelectorAll('.field-error-msg').forEach(e => e.remove());
   sectionEl.querySelectorAll('.field-error').forEach(e => e.classList.remove('field-error'));
+  // Clear tab error badges
+  sectionEl.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('tab-has-error'));
 }
 
 function markError(visibleEl, message) {
@@ -44,6 +64,15 @@ function markError(visibleEl, message) {
   anchor.insertAdjacentElement('afterend', msg);
 }
 
+function switchParentTab(tabName) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tabName);
+  });
+  document.querySelectorAll('.parent-panel').forEach(p => {
+    p.classList.toggle('active', p.id === tabName);
+  });
+}
+
 function validateSection(sectionNum) {
   const sectionEl = document.querySelector(`.form-section[data-section="${sectionNum}"]`);
   if (!sectionEl) return true;
@@ -52,7 +81,9 @@ function validateSection(sectionNum) {
   const rules = sectionRules[sectionNum] || [];
   let valid = true;
   let firstErrorEl = null;
+  let firstErrorTab = null;
 
+  // Group errors by tab so we can switch to the first tab that has errors
   rules.forEach(rule => {
     const fieldEl = rule.hidden
       ? sectionEl.querySelector(`input[type="hidden"][name="${rule.name}"]`)
@@ -67,14 +98,38 @@ function validateSection(sectionNum) {
         : fieldEl;
       if (visibleEl) {
         markError(visibleEl, `${rule.label} is required.`);
-        if (!firstErrorEl) firstErrorEl = visibleEl;
+        // Track first error and its tab
+        if (!firstErrorEl) {
+          firstErrorEl = visibleEl;
+          firstErrorTab = rule.tab || null;
+        }
       }
     }
   });
 
+  // Mark tabs that have errors with a visual badge
+  const errorTabs = new Set(
+    rules
+      .filter(r => r.tab && !(r.hidden
+        ? (sectionEl.querySelector(`input[type="hidden"][name="${r.name}"]`)?.value || '').trim()
+        : (sectionEl.querySelector(`[name="${r.name}"]`)?.value || '').trim()))
+      .map(r => r.tab)
+  );
+  sectionEl.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('tab-has-error', errorTabs.has(btn.dataset.tab));
+  });
+
+  // Switch to the tab containing the first error (for section 3)
+  if (firstErrorTab) {
+    switchParentTab(firstErrorTab);
+  }
+
   if (firstErrorEl) {
-    firstErrorEl.focus();
-    firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Small delay so the tab switch completes before scrolling
+    setTimeout(() => {
+      firstErrorEl.focus();
+      firstErrorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
   }
   return valid;
 }
@@ -132,7 +187,7 @@ document.querySelectorAll('.btn-prev').forEach(btn => {
 const form = document.getElementById('admissionForm');
 if (form) {
   form.addEventListener('submit', function (e) {
-    const requiredSections = [1, 4];
+    const requiredSections = [1, 3, 4];
     let failSection = null;
 
     for (const sNum of requiredSections) {
@@ -151,33 +206,37 @@ if (form) {
 
 // ── Live clear errors on change ───────────────────────────
 
+function clearFieldError(el) {
+  const wrap = el.closest('.searchable-select-wrap');
+  const target = wrap ? wrap.querySelector('.searchable-input') : el;
+  if (target) target.classList.remove('field-error');
+  const msgSibling = wrap ? wrap.nextElementSibling : el.nextElementSibling;
+  if (msgSibling && msgSibling.classList.contains('field-error-msg')) msgSibling.remove();
+
+  // If no more errors remain on this tab, remove the tab error badge
+  const panel = el.closest('.parent-panel');
+  if (panel) {
+    const tabId = panel.id;
+    const section = el.closest('.form-section');
+    const hasErrors = section && section.querySelector(`#${tabId} .field-error`);
+    if (!hasErrors && section) {
+      const tabBtn = section.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+      if (tabBtn) tabBtn.classList.remove('tab-has-error');
+    }
+  }
+}
+
 document.addEventListener('input', function (e) {
   const el = e.target;
-  if (el.classList.contains('field-error')) {
-    el.classList.remove('field-error');
-    const wrap = el.closest('.searchable-select-wrap');
-    const next = wrap ? wrap.nextElementSibling : el.nextElementSibling;
-    if (next && next.classList.contains('field-error-msg')) next.remove();
+  if (el.classList.contains('field-error') || el.closest('.searchable-select-wrap')) {
+    clearFieldError(el);
   }
 });
 
 document.addEventListener('change', function (e) {
   const el = e.target;
-  if (el.tagName === 'SELECT') {
-    el.classList.remove('field-error');
-    const next = el.nextElementSibling;
-    if (next && next.classList.contains('field-error-msg')) next.remove();
-  }
-  if (el.type === 'hidden') {
-    const wrap = el.closest('.searchable-select-wrap');
-    if (wrap) {
-      const vis = wrap.querySelector('.searchable-input');
-      if (vis) {
-        vis.classList.remove('field-error');
-        const msg = wrap.nextElementSibling;
-        if (msg && msg.classList.contains('field-error-msg')) msg.remove();
-      }
-    }
+  if (el.tagName === 'SELECT' || el.type === 'hidden') {
+    clearFieldError(el);
   }
 });
 

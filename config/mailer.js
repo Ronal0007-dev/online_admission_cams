@@ -72,6 +72,10 @@ async function sendApprovalEmail(student) {
           <span class="info-value">${student.gender}</span>
         </div>
         <div class="info-row">
+          <span class="info-label">Class Level</span>
+          <span class="info-value">${student.classLevel}</span>
+        </div>
+        <div class="info-row">
           <span class="info-label">Approval Date</span>
           <span class="info-value">${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
         </div>
@@ -192,6 +196,14 @@ async function sendSubmissionEmail(student) {
               </td>
               <td style="padding:8px 0;border-bottom:1px solid #e2e8f0;text-align:right;">
                 <span style="color:#1e293b;font-weight:600;font-size:13px;">${student.gender}</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;border-bottom:1px solid #e2e8f0;">
+                <span style="color:#64748b;font-weight:500;font-size:13px;">Class Level to Join</span>
+              </td>
+              <td style="padding:8px 0;border-bottom:1px solid #e2e8f0;text-align:right;">
+                <span style="color:#1e293b;font-weight:700;font-size:13px;background:#dbeafe;color:#1e40af;padding:2px 10px;border-radius:999px;">${student.classLevel}</span>
               </td>
             </tr>
             <tr>
